@@ -7,6 +7,7 @@ import java.util.Random;
 public class UnoDeck {
     private UnoCard[] cards;
     private int cardsInDeck;
+    private UnoCard.Color color;
 
     public UnoDeck() {
         cards = new UnoCard[108];
@@ -71,7 +72,7 @@ public class UnoDeck {
     }
     public UnoCard[] drawCard(int n){
         if (n < 0){
-            throw new IllegalArgumentException("Должен тянуть положительные карты, но пытался тянуть"+ n + "карты.");
+            throw new IllegalArgumentException("Должен тянуть положительные карты, но пытался тянуть" + n + "карты.");
         }
         if (n > cardsInDeck) {
             throw new IllegalArgumentException("Не могу рисовать" + n + "карты, так как есть только" + cardsInDeck + "карты.");

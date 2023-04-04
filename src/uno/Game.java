@@ -65,4 +65,77 @@ public class Game {
         }
         stockPile.add(card);
     }
+    public UnoCard getTopCard(){
+        return new UnoCard(validColor, validValie);
+    }
+    public ImageIcon getTopCardImage(){
+        return new ImageIcon(validColor + "-" + validValie + ".png");
+    }
+    public boolean isGameOver() {
+        for (String player : this.playerIds) {
+            if (hasEmptyHand(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public String getCurrentPlayer(){
+        return this.playerIds[this.currentPlayer];
+    }
+    public String getPreviousPlayer(int i){
+        int index = this.currentPlayer - i;
+        if(index == -1){
+            index = playerIds.length - 1;
+        }
+        return this.playerIds[index];
+    }
+    public String[] getPlayers(){
+        return playerIds;
+    }
+    public ArrayList<UnoCard> getPlayerHand(String pid){
+        int index = Arrays.asList(playerIds).indexOf(pid);
+        return playerHand.get(index);
+    }
+    public int getPlayerHandSize(String pid){
+        return getPlayerHand(pid).size();
+    }
+    public UnoCard getPlayerCard(String pid, int choice){
+        ArrayList<UnoCard> hand  = getPlayerHand(pid);
+        return hand.get(choice);
+    }
+    public boolean hasEmptyHand(String pid){
+        return getPlayerHand(pid).isEmpty();
+    }
+    public  boolean validCardPlay(UnoCard card){
+        return card.getColor() == validColor || card.getValue() == validValie;
+    }
+    public void checkPlayerTurn(String pid) throws InvalidPlayerTurnException{
+        if(this.playerIds[this.currentPlayer] !=pid){
+            throw new InvalidPlayerTurnException("Это не" + pid + "'s поворот", pid);
+        }
+    }
+
+    public void submitDrasw(String pid) throws InvalidPlayerTurnException{
+        checkPlayerTurn(pid);
+        if (deck.isEmpty()){
+            deck.replaceDeckWith(stockPile);
+            deck.shuffle();
+        }
+        getPlayerHand(pid).add(deck.drawCard());
+        if(gameDirection == false){
+            currentPlayer = (currentPlayer + 1)% playerIds.length;
+        }
+        else if (gameDirection == true){
+            currentPlayer = (currentPlayer - 1) % playerIds.length;
+            if (currentPlayer == -1){
+                currentPlayer = playerIds.length -  1;
+            }
+        }
+    }
+    public void setCardColor(UnoCard.Color color){
+        validColor = color;
+    }
+
+    private class InvalidPlayerTurnException extends Exception {
+    }
 }
