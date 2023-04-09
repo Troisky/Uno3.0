@@ -137,5 +137,7 @@ public class Game {
     }
 
     private class InvalidPlayerTurnException extends Exception {
+        public InvalidPlayerTurnException(String s, String pid) {
+        }
     }
 }
